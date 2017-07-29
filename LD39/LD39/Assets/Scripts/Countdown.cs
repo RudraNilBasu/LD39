@@ -9,6 +9,7 @@ public class Countdown : MonoBehaviour {
     Rigidbody2D rb;
 
     PlayerMotor motor;
+    PlayerController controller;
 
     struct energyRate
     {
@@ -35,28 +36,34 @@ public class Countdown : MonoBehaviour {
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         motor = GetComponent<PlayerMotor>();
+        controller = GetComponent<PlayerController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (!motor.groundCheck())
+        if (controller.isActive())
         {
-            playerEnergy.setVerticalRate(1);
-        }
-        else {
-            playerEnergy.setVerticalRate(0);
-        }
-        if (rb.velocity.x != 0)
-        {
-            playerEnergy.setHorrizontalRate(1);
-        }
-        else
-        {
-            playerEnergy.setHorrizontalRate(0);
-        }
-        timeLeft -= playerEnergy.getRate() * Time.deltaTime;
-        if (timeLeft < 0.0f) {
-            Debug.Log("Game Over");
+            if (!motor.groundCheck())
+            {
+                playerEnergy.setVerticalRate(1);
+            }
+            else
+            {
+                playerEnergy.setVerticalRate(0);
+            }
+            if (rb.velocity.x != 0)
+            {
+                playerEnergy.setHorrizontalRate(1);
+            }
+            else
+            {
+                playerEnergy.setHorrizontalRate(0);
+            }
+            timeLeft -= playerEnergy.getRate() * Time.deltaTime;
+            if (timeLeft < 0.0f)
+            {
+                controller.kill();
+            }
         }
 	}
 }
