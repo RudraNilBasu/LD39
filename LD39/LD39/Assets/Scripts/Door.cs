@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour {
 
@@ -16,7 +17,8 @@ public class Door : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.tag == "Player") {
-            Debug.Log("Next Level");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            //Debug.Log("Next Level");
         }
     }
 }

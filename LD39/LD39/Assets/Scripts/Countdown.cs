@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Countdown : MonoBehaviour {
 
@@ -10,6 +11,9 @@ public class Countdown : MonoBehaviour {
 
     PlayerMotor motor;
     PlayerController controller;
+
+    [SerializeField]
+    float[] timeForCurrentLevel;
 
     struct energyRate
     {
@@ -37,10 +41,13 @@ public class Countdown : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         motor = GetComponent<PlayerMotor>();
         controller = GetComponent<PlayerController>();
+
+        timeLeft = timeForCurrentLevel[SceneManager.GetActiveScene().buildIndex];
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        Debug.Log("Time Left: " + timeLeft + " rate: " + playerEnergy.getRate());
         if (controller.isActive())
         {
             if (!motor.groundCheck())
