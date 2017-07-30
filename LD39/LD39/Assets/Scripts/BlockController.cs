@@ -17,9 +17,7 @@ public class BlockController : MonoBehaviour {
 
     void OnCollisionExit2D(Collision2D coll)
     {
-        Debug.Log("Exit");
-        if (coll.gameObject.tag == "Player") {
-            Debug.Log("Player exitted");
+        if ((coll.gameObject.tag == "Player") || (coll.gameObject.tag == "Zombie")) {
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
     }

@@ -41,13 +41,18 @@ public class Countdown : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         motor = GetComponent<PlayerMotor>();
         controller = GetComponent<PlayerController>();
-
-        timeLeft = timeForCurrentLevel[SceneManager.GetActiveScene().buildIndex];
+        
+        if (gameObject.tag == "Zombie")
+        {
+            timeLeft = 1.5f;
+        }
+        else if (gameObject.tag == "Player") {
+            timeLeft = timeForCurrentLevel[SceneManager.GetActiveScene().buildIndex];
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log("Time Left: " + timeLeft + " rate: " + playerEnergy.getRate());
         if (controller.isActive())
         {
             if (!motor.groundCheck())

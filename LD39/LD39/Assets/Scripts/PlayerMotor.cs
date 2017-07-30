@@ -10,6 +10,8 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField]
     bool isGrounded;
 
+    PlayerController controller;
+
     [SerializeField]
     LayerMask layers;
     // Use this for initialization
@@ -17,13 +19,30 @@ public class PlayerMotor : MonoBehaviour
     {
         // There will always be a Rigidbody2D
         rb = gameObject.GetComponent<Rigidbody2D>();
+        controller = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (gameObject.tag == "Zombie")
+        {
+            // not aligning when instantiated for some reason
+            float speedX;// = Input.GetAxisRaw("Horizontal") * 5.0f;
+            if (controller.isActive())
+            {
+                speedX = Input.GetAxisRaw("Horizontal") * 5.0f;
+            }
+            else {
+                speedX = 0.0f;
+            }
+            rb.velocity = new Vector2(speedX, rb.velocity.y);
+        }
         //rb.MovePosition(rb.position + velocity*Time.fixedDeltaTime);
-        rb.velocity = new Vector2(velocity, rb.velocity.y);
+        if (gameObject.tag == "Player")
+        {
+            rb.velocity = new Vector2(velocity, rb.velocity.y);
+        }
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, 500, layers);
         if (hit.distance < 0.5f)
@@ -39,6 +58,10 @@ public class PlayerMotor : MonoBehaviour
 
     public void MoveBody(float _velocity)
     {
+        /*
+        if (gameObject.tag == "Zombie")
+            Debug.Log("Assigning Zombie velocity: " + velocity + " rb vel: " + rb.velocity.x );
+            */
         velocity = _velocity;
     }
 

@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
         if (currentState == (int)States.active)
         {
             float speedX = Input.GetAxisRaw("Horizontal") * moveSpeed;// * Time.deltaTime;
-
+            
             motor.MoveBody(speedX);
 
             if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.tag == "Player")
