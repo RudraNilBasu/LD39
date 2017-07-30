@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Door : MonoBehaviour {
@@ -12,4 +12,11 @@ public class Door : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.tag == "Player") {
+            Debug.Log("Next Level");
+        }
+    }
 }
