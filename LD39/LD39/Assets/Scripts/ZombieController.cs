@@ -8,9 +8,14 @@ public class ZombieController : MonoBehaviour {
     [SerializeField]
     SpriteRenderer gfx;
 
+    [SerializeField]
+    GameObject arrow;
+
 	// Use this for initialization
 	void Start () {
         isSelected = false;
+
+        arrow.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -21,6 +26,7 @@ public class ZombieController : MonoBehaviour {
     public void Select()
     {
         isSelected = true;
+        arrow.SetActive(true);
         //gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
         gfx.color = Color.blue;
     }
@@ -28,6 +34,7 @@ public class ZombieController : MonoBehaviour {
     public void Deselect()
     {
         isSelected = false;
+        arrow.SetActive(false);
         //gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
         gfx.color = Color.red;
     }

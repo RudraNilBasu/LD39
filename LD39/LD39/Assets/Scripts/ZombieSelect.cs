@@ -62,7 +62,7 @@ public class ZombieSelect : MonoBehaviour {
 
     void activateZombie()
     {
-        print("Activating...");
+        deselectZombie(selectedZombie);
         selectedZombie.GetComponent<PlayerController>().activate();
         selectionMode = false;
     }
