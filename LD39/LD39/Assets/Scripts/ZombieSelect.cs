@@ -11,6 +11,9 @@ public class ZombieSelect : MonoBehaviour {
     [SerializeField]
     List<GameObject> zmb;
 
+    [SerializeField]
+    GameObject spark;
+
     GameObject selectedZombie;
 
 	// Use this for initialization
@@ -65,6 +68,9 @@ public class ZombieSelect : MonoBehaviour {
         deselectZombie(selectedZombie);
         selectedZombie.GetComponent<PlayerController>().activate();
         selectionMode = false;
+
+        GameObject _spark = (GameObject)Instantiate(spark, selectedZombie.transform.position, Quaternion.identity);
+        StartCoroutine(Kill(_spark));
     }
 
     void selectZombie(GameObject _zombie)
@@ -76,5 +82,11 @@ public class ZombieSelect : MonoBehaviour {
     void deselectZombie(GameObject _zombie)
     {
         _zombie.GetComponent<ZombieController>().Deselect();
+    }
+
+    IEnumerator Kill(GameObject _spark)
+    {
+        yield return new WaitForSeconds(1.0f);
+        Destroy(_spark);
     }
 }
