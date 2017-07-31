@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Countdown : MonoBehaviour {
+
+    [SerializeField]
+    RectTransform healthBarRect;
 
     [SerializeField]
     float timeLeft;
@@ -49,6 +53,10 @@ public class Countdown : MonoBehaviour {
         else if (gameObject.tag == "Player") {
             timeLeft = timeForCurrentLevel[SceneManager.GetActiveScene().buildIndex];
         }
+
+        if (healthBarRect == null && gameObject.tag == "Player") {
+            Debug.LogError("ERROR: No health bar found");
+        }
 	}
 	
 	// Update is called once per frame
@@ -72,9 +80,27 @@ public class Countdown : MonoBehaviour {
                 playerEnergy.setHorrizontalRate(0);
             }
             timeLeft -= playerEnergy.getRate() * Time.deltaTime;
+
+            if (gameObject.tag == "Player")
+            {
+                float _healthBarValue = (float)timeLeft / timeForCurrentLevel[SceneManager.GetActiveScene().buildIndex];
+                healthBarRect.localScale = new Vector3(_healthBarValue, healthBarRect.localScale.y, healthBarRect.localScale.z);
+            }
+            else if (gameObject.tag == "Zombie")
+            {
+                float _healthBarValue = (float)timeLeft / 1.5f;
+                healthBarRect.localScale = new Vector3(_healthBarValue, healthBarRect.localScale.y, healthBarRect.localScale.z);
+            }
             if (timeLeft < 0.0f)
             {
                 controller.kill();
+            }
+        }
+        else
+        {
+            if (gameObject.tag == "Zombie")
+            {
+                healthBarRect.localScale = new Vector3(0.0f, healthBarRect.localScale.y, healthBarRect.localScale.z);
             }
         }
 	}
