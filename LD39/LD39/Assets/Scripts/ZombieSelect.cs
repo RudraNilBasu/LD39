@@ -47,7 +47,9 @@ public class ZombieSelect : MonoBehaviour {
 
         for (int i = 0; i < zmb.Count; i++) {
             if (!zmb[i].GetComponent<PlayerController>().isDeactivated())
-                zmb.RemoveAt(i);
+            {
+                zmb.RemoveAt(i--);
+            }
         }
     }
 
@@ -88,5 +90,14 @@ public class ZombieSelect : MonoBehaviour {
     {
         yield return new WaitForSeconds(1.0f);
         Destroy(_spark);
+    }
+
+    public bool isActiveZombiesPresent()
+    {
+        foreach (GameObject zombie in zmb) {
+            if (zombie.GetComponent<PlayerController>().isActive())
+                return true;
+        }
+        return false;
     }
 }

@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     GameObject activationText;
 
     [SerializeField]
+    GameObject levelGenerator;
+
+    [SerializeField]
     SpriteRenderer zombieGfx;
     [SerializeField]
     Sprite deactive, active;
@@ -28,36 +31,54 @@ public class PlayerController : MonoBehaviour
 
     int currentState;
 
+    Camera _camera;
+
     // Use this for initialization
     void Start()
     {
         if (gameObject.tag == "Player")
         {
             currentState = (int)States.active;
+            levelGenerator = GameObject.Find("GameManager");
+            if (levelGenerator == null) {
+                Debug.Log("Level Generator not found");
+            }
         }
         else if (gameObject.tag == "Zombie") {
             currentState = (int)States.deactive;
 
             zombieGfx.sprite = deactive;
         }
-        
+
+        _camera = GameObject.Find("Camera").GetComponent<Camera>();
         motor = gameObject.GetComponent<PlayerMotor>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentState == (int)States.active)
+        if (currentState == (int)States.active && gameObject.tag == "Player")
         {
+            bool _activeZombiesPresent = false;
+            if (levelGenerator != null)
+            {
+                _activeZombiesPresent = levelGenerator.GetComponent<ZombieSelect>().isActiveZombiesPresent();
+            }
+            else {
+                Debug.LogError("Level generator is NULL");
+            }
             float speedX = Input.GetAxisRaw("Horizontal") * moveSpeed;// * Time.deltaTime;
-            
+            if (_activeZombiesPresent)
+            {
+                speedX = 0.0f;
+            }
             motor.MoveBody(speedX);
 
-            if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.tag == "Player")
+            if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.tag == "Player" && !_activeZombiesPresent)
             {
                 motor.jump(jumpSpeed);
             }
-
+            /*
             if (gameObject.tag == "Player") {
                 if (speedX != 0)
                 {
@@ -67,6 +88,14 @@ public class PlayerController : MonoBehaviour
                 {
                     gameObject.GetComponent<AudioSource>().Pause();
                 }
+            }
+            */
+        }
+
+        if (gameObject.tag == "Player") {
+            Vector3 screenPoint = _camera.WorldToViewportPoint(transform.position);
+            if (screenPoint.x < 0.0f || screenPoint.x > 1.0f) {
+                kill();
             }
         }
     }
